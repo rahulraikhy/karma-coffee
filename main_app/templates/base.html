@@ -25,7 +25,7 @@
     <nav class="navbar navbar-expand-lg sticky-top" style="background-color: #ffffff;">
       <div class="container-md">
         <a class="navbar-brand" href="{% url 'home' %}">
-          <img src="static/media/Coffee.png" alt="Logo" height="26vmin" class="d-inline-block align-text-top">
+          <img src="{% static 'media/Coffee.png' %}" alt="Logo" height="26vmin" class="d-inline-block align-text-top">
           <span style="font-family: 'Calistoga', cursive; font-size: 2.5vmin;">karma</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
@@ -68,11 +68,11 @@
     </nav>
 
   </header>
-  <main>
+  <main class="mb-auto">
     {% block content %}
     {% endblock %}
   </main>
-  <footer>
+  <footer class="bd-footer text-muted">
     <div>All Rights Reserved, &copy; 2022 &nbsp;</div>
   </footer>
 </body>
