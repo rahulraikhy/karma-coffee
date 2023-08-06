@@ -1,6 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<div class="container" style="margin-top: 10vmin;">
+
+
 <h1>This Specific Coffee</h1>
 
+<h2>{{ product.name }}</h2>
+<p>{{ product.description }}</p>
+
+
+<form action="{% url 'add_to_cart' product.id %}" method="POST">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-primary">Add to Cart</button>
+
 {% endblock %}
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+
+</div>
+{% endif %}
