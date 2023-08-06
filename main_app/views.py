@@ -61,6 +61,8 @@ def cart(request):
 
 def add_to_cart(request, product_id):
     product = Product.objects.get(id=product_id)
+    # Fetch the quantity from POST data
+    quantity = int(request.POST.get('quantity', 1))
 
     # If the user is authenticated, associate the cart with the user
     if request.user.is_authenticated:
@@ -80,8 +82,11 @@ def add_to_cart(request, product_id):
         product=product, order=order)
 
     # If the product already exists in the cart, increase its quantity
-    if not item_created:
-        order_item.quantity += 1
+    if item_created:
+        order_item.quantity = quantity
+    else:
+        order_item.quantity += quantity
+
         order_item.save()
 
     messages.success(request, "Item added to cart successfully!")
