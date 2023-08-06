@@ -12,14 +12,27 @@
             <th>Quantity</th>
             <th>Price</th>
             <th>Total</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         {% for item in cart.orderitem_set.all %}
         <tr>
             <td>{{ item.product.name }}</td>
-            <td>{{ item.quantity }}</td>
+            <td>
+              <form action="{% url 'update-cart' item.product.id %}" method="post">
+                  {% csrf_token %}
+                  <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
+                  <input type="submit" value="Update">
+              </form>
+          </td>
+          
             <td>${{ item.product.price }}</td>
+            <td>${{ item.get_total_item_price }}</td>
+            
+            <td><a href="{% url 'remove-from-cart' item.product.id %}">Remove</a></td>
+
+
         </tr>
         {% endfor %}
     </tbody>

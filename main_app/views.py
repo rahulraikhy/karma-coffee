@@ -61,6 +61,8 @@ def cart(request):
 
 def add_to_cart(request, product_id):
     product = Product.objects.get(id=product_id)
+    # Fetch the quantity from POST data
+    quantity = int(request.POST.get('quantity', 1))
 
     # If the user is authenticated, associate the cart with the user
     if request.user.is_authenticated:
@@ -77,15 +79,70 @@ def add_to_cart(request, product_id):
 
     # Check if the product already exists in the cart
     order_item, item_created = OrderItem.objects.get_or_create(
-        product=product, order=order)
+        product=product, order=order, quantity=quantity)
 
     # If the product already exists in the cart, increase its quantity
-    if not item_created:
-        order_item.quantity += 1
+    if item_created:
+        order_item.quantity = quantity
+    else:
+        order_item.quantity += quantity
+
         order_item.save()
 
     messages.success(request, "Item added to cart successfully!")
     return redirect('detail', product_id=product_id)
+
+
+def update_cart(request, product_id):
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity'))
+
+        if request.user.is_authenticated:
+            cart = Order.objects.filter(user=request.user, status='C').last()
+        else:
+            cart_id = request.session.get('cart_id')
+            cart = Order.objects.filter(
+                id=cart_id, status='C').last() if cart_id else None
+
+        if not cart:
+            messages.warning(request, "No active cart found!")
+            return redirect('cart')
+
+        order_item = OrderItem.objects.filter(
+            product_id=product_id, order=cart).first()
+
+        if order_item:
+            order_item.quantity = quantity
+            order_item.save()
+            messages.success(request, "Item quantity updated successfully!")
+        else:
+            messages.warning(request, "Item not found in the cart!")
+
+    return redirect('cart')
+
+
+def remove_from_cart(request, product_id):
+    if request.user.is_authenticated:
+        cart = Order.objects.filter(user=request.user, status='C').last()
+    else:
+        # Handle guest users by fetching the cart from the session
+        cart_id = request.session.get('cart_id')
+        cart = Order.objects.filter(
+            id=cart_id, status='C').last() if cart_id else None
+
+    if not cart:
+        messages.warning(request, "No active cart found!")
+        return redirect('cart')
+
+    order_item = OrderItem.objects.filter(
+        product_id=product_id, order=cart).first()
+    if order_item:
+        order_item.delete()
+        messages.success(request, "Item removed from cart successfully!")
+    else:
+        messages.warning(request, "Item not found in the cart!")
+
+    return redirect('cart')
 
 
 def checkout(request):
