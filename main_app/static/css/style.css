@@ -1,16 +1,53 @@
-
-* {
-  font-family: 'Open Sans', sans-serif;
+/* Product Index Page */
+main.index-main {
+  margin: 0 5%;
 }
 
-body {
+div.index-header {
+  text-align: center;
+  margin: 0;
+  padding: 4rem 0;
+  border: none;
+}
+
+div.index-header > h1,
+div.index-header > p {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+div.index-nav-bar {
   display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  background-color: red;
+  margin: 0;
+  padding: 1rem 1rem 1rem 2rem;
 }
 
-main {
-  flex: 1 0 auto;
+button.index-nav-category {
+  font-weight: bold;
 }
 
+.index-nav-collapse {
+  padding: 0 1rem 1rem 2rem;
+}
+
+a {
+  text-decoration: none;
+}
+
+.index-nav-category-detail > a:hover {
+  text-decoration: underline black;
+}
+
+div.index-product-container {
+  margin: 0 auto;
+}
+
+div.index-product {
+  margin: 0;
+  padding: 1.5%;
+}
+
+.index-container {
+  display: flex;
+}
