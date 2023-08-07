@@ -1,3 +1,10 @@
+import stripe
+import json
+from django.shortcuts import get_object_or_404
+from django.views import View
+from django.conf import settings
+from django.http import JsonResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
@@ -5,6 +12,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product, Order, OrderItem
+
+stripe.api_key = settings.STRIPE_API_KEY_HIDDEN
+
+YOUR_DOMAIN = 'http://localhost:8000'
 
 # Create your views here.
 
@@ -146,7 +157,72 @@ def remove_from_cart(request, product_id):
 
 
 def checkout(request):
+    pub_key = 'pk_test_51NcAplKTTNpybu1oBa9m6XeqC3TGQOCw0EYJQhJJHLCf3eC996sIC8pdtr7NSw3GBDYpPZdEEJIA4TW7FYZDvCD200HwjTkail'
+    print('Hello')
+    print(pub_key)
     cart = Order.objects.filter(user=request.user, status='C').last()
-    cart.status = 'P'
     cart.save()
-    return redirect('cart')
+    return render(request, 'checkout.html', {'cart': cart, 'pub_key': pub_key})
+
+
+class CreateCheckoutSessionView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        cart = Order.objects.filter(user=request.user, status='C').last()
+
+        line_items = []
+        for item in cart.orderitem_set.all():
+            line_items.append({
+                'price_data': {
+                    'currency': 'usd',
+                    # Stripe expects amounts in cents
+                    'unit_amount': int(item.product.price * 100),
+                    'product_data': {
+                        'name': item.product.name,
+                        # Add images if you have
+                    },
+                },
+                'quantity': item.quantity,
+            })
+
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=['card'],
+            line_items=line_items,
+            mode='payment',
+            success_url=YOUR_DOMAIN +
+            '/success/?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=YOUR_DOMAIN + '/cancel/',
+        )
+
+        # Replace placeholder with actual id
+        checkout_session.success_url = checkout_session.success_url.replace(
+            '{CHECKOUT_SESSION_ID}', checkout_session.id)
+
+        # Store the session id in the order
+        cart.session_id = checkout_session.id
+        cart.save()
+
+        return JsonResponse({
+            'id': checkout_session.id
+        })
+
+
+def checkout_success(request):
+    # Extract session_id from the URL
+    session_id = request.GET.get('session_id')
+
+    # Retrieve the session
+    session = stripe.checkout.Session.retrieve(session_id)
+
+    # Retrieve the order associated with this session
+    order = Order.objects.get(session_id=session_id)
+
+    # Update order status if the payment was successful
+    if session.payment_status == 'paid':
+        order.status = 'P'
+        order.save()
+
+    return render(request, 'success.html')
+
+
+def checkout_cancel(request):
+    return render(request, 'cancel.html')

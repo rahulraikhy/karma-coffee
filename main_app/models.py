@@ -11,7 +11,7 @@ ROAST = (
 
 ORDER_STATUS = (
     ('C', 'Cart'),           # Order not yet completed
-    ('P', 'Pending'),        # Order completed, payment pending
+    ('P', 'Paid'),        # Order completed, payment pending
     ('S', 'Shipped'),        # Order shipped
     ('D', 'Delivered'),      # Order delivered
 )
@@ -45,6 +45,7 @@ class Order(models.Model):
         User, on_delete=models.CASCADE, null=True, blank=True)
     status = models.CharField(
         max_length=1, choices=ORDER_STATUS, default=ORDER_STATUS[0][0])
+    session_id = models.CharField(max_length=100, blank=True, null=True)
 
     def __str__(self):
         return f'Order #{self.id} - {self.get_status_display()}'
@@ -57,8 +58,8 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
 
     def __str__(self):
