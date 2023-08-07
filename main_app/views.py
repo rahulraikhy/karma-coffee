@@ -11,7 +11,9 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import Product, Order, OrderItem
+from .models import Product, Order, OrderItem, Review, User
+
+from .forms import ReviewForm
 
 stripe.api_key = settings.STRIPE_API_KEY_HIDDEN
 
@@ -37,9 +39,42 @@ def products_index(request):
 
 def products_detail(request, product_id):
     product = Product.objects.get(id=product_id)
+
+    # id_list = product.review.all().values_list('id')
+    # reviews_for_product = Review.objects.filter(id__in=id_list)
+    if request.user.is_authenticated:
+        user = request.user
+        delivered_orders = Order.objects.filter(user=user, status='D', orderitem__product=product)
+
+        if delivered_orders.exists():
+            review_form = ReviewForm()
+        else:
+            review_form = None
+
+    reviews_for_product = product.reviews.all()
+
     return render(request, 'products/detail.html', {
-        'product': product
+        'product': product, 
+        'review_form': review_form,
+        'reviews': reviews_for_product
     })
+
+
+def add_review(request, product_id):
+    form = ReviewForm(request.POST)
+
+    if form.is_valid():
+        product = Product.objects.get(id=product_id)
+        # user = User.objects.get(id=user_id)
+        user_id = request.user.id
+
+        new_review = form.save(commit=False)
+        new_review.product = product
+        new_review.user_id = user_id
+        new_review.save()
+
+    return redirect('detail', product_id)
+        
 
 
 def signup(request):

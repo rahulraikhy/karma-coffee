@@ -67,3 +67,20 @@ class OrderItem(models.Model):
 
     def get_total_item_price(self):
         return self.product.price * self.quantity
+
+
+
+class Review(models.Model):
+    purchase_date = models.DateField('Purchased Date', default="2023-08-15")
+    review_date = models.DateField('Review Date', default="2023-08-17")
+    content = models.TextField(max_length=250)
+    rating = models.CharField(max_length=1, default='5')
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"Purchased Date: {self.purchase_date} / Review Date: {self.review_date} / Product: { self.product.name } / "
+
+    class Meta:
+        ordering = ['-purchase_date']
