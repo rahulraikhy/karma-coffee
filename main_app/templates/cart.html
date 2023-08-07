@@ -40,9 +40,9 @@
 
 <h3>Total: ${{ cart.get_total }}</h3>
 
-<form action="{% url 'checkout' %}" method="POST">
+<form id="checkout-form" action="#">
   {% csrf_token %}
-<button type="submit" class="btn btn-primary">Checkout</button>
+  <button type="submit" id="checkout-button">Checkout</button>
 </form>
 
 {% else %}
@@ -50,5 +50,54 @@
 {% endif %}
 
 </div>
-{% endblock %}
 
+<script type="text/javascript">
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+  }
+
+  var stripe = Stripe('pk_test_51NcAplKTTNpybu1oBa9m6XeqC3TGQOCw0EYJQhJJHLCf3eC996sIC8pdtr7NSw3GBDYpPZdEEJIA4TW7FYZDvCD200HwjTkail');
+
+  document.getElementById('checkout-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var csrftoken = getCookie('csrftoken');
+    
+    fetch('/create-checkout-session/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrftoken
+      }
+    })
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(session) {
+      return stripe.redirectToCheckout({ sessionId: session.id });
+    })
+    .then(function(result) {
+      // If redirectToCheckout fails due to a browser or network
+      // error, you should display the localized error message to your
+      // customer using error.message.
+      if (result.error) {
+        alert(result.error.message);
+      }
+    })
+    .catch(function(error) {
+      console.error('Error:', error);
+    });
+  });
+</script>
+
+{% endblock %}

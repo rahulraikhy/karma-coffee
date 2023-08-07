@@ -30,7 +30,13 @@ SECRET_KEY = 'django-insecure-0wqq2n0b4a81x4zn23i_*o+(93!1uf3laaae=siv6gx1!3%#r^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '6fff-2800-484-5b81-1df9-79a3-2a17-9a4e-a490.ngrok-free.app',
+    'localhost',
+]
+
+STRIPE_API_KEY_PUBLISHABLE = 'pk_test_51NcAplKTTNpybu1oBa9m6XeqC3TGQOCw0EYJQhJJHLCf3eC996sIC8pdtr7NSw3GBDYpPZdEEJIA4TW7FYZDvCD200HwjTkail'
+STRIPE_API_KEY_HIDDEN = os.environ['STRIPE_API_KEY_HIDDEN']
 
 
 # Application definition
@@ -60,7 +66,7 @@ ROOT_URLCONF = 'karmacoffee.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'main_app/templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
