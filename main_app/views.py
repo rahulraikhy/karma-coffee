@@ -6,14 +6,19 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product, Order, OrderItem, Review, User
 
+<<<<<<< HEAD
 from .forms import ReviewForm, UserForm
+=======
+from .forms import ReviewForm
+from .forms import RegisterUserForm
+>>>>>>> main
 
 stripe.api_key = settings.STRIPE_API_KEY_HIDDEN
 
@@ -40,8 +45,8 @@ def products_index(request):
 def products_detail(request, product_id):
     product = Product.objects.get(id=product_id)
 
-    # id_list = product.review.all().values_list('id')
-    # reviews_for_product = Review.objects.filter(id__in=id_list)
+    review_form = None
+
     if request.user.is_authenticated:
         user = request.user
         delivered_orders = Order.objects.filter(
@@ -49,8 +54,6 @@ def products_detail(request, product_id):
 
         if delivered_orders.exists():
             review_form = ReviewForm()
-        else:
-            review_form = None
 
     reviews_for_product = product.reviews.all()
 
@@ -75,19 +78,50 @@ def add_review(request, product_id):
         new_review.save()
 
     return redirect('detail', product_id)
+<<<<<<< HEAD
+=======
+
+
+# def edit_review(request, review_id, product_id):
+#     review = Review.objects.get(id=review_id)
+#     # form = ReviewForm(request.POST)
+
+#     if request.method == 'POST':
+#         new_content = request.POST.get('content')
+#         review.content = new_content
+#         review.save()
+#         return redirect('detail', product_id=review.product.id)
+    
+#     return render(request, 'product_detail.html', {'product': review.product, 'edit_review_id': review.id})
+
+
+def delete_review(request, product_id):
+    if request.method == 'POST':
+        review_id = request.POST.get('review_id')
+        print("Review ID:", review_id)
+        print("Product ID:", product_id)
+        try:
+            review = Review.objects.get(id=review_id, product_id=product_id)
+            print("Review found:", review)
+            review.delete()
+        except Review.DoesNotExist:
+            print("Review not found")
+        return redirect('detail', product_id=product_id)
+
+>>>>>>> main
 
 
 def signup(request):
     error_message = ''
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegisterUserForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
             return redirect('index')
         else:
             error_message = 'Invalid sign up - try again'
-    form = UserCreationForm()
+    form = RegisterUserForm()
     context = {'form': form, 'error_message': error_message}
     return render(request, 'registration/signup.html', context)
 
@@ -262,6 +296,7 @@ def checkout_success(request):
 def checkout_cancel(request):
     return render(request, 'cancel.html')
 
+<<<<<<< HEAD
 
 @login_required
 def account_view(request):
@@ -281,3 +316,8 @@ def account_view(request):
 def order_detail_view(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'order_detail.html', {'order': order})
+=======
+def logout_view(request):
+    logout(request)
+    return redirect('/')
+>>>>>>> main

@@ -25,4 +25,5 @@ urlpatterns = [
     path('create-checkout-session/', CreateCheckoutSessionView.as_view(),
          name='create-checkout-session'),
 
+    path('accounts/', include('allauth.urls')),
 ]
