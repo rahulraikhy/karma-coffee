@@ -90,6 +90,13 @@
             <p>Review Date: {{ review.review_date }}</p>
             <p>Rating: {{ review.rating }}</p>
             <p>Content: {{ review.content }}</p>
+            {% if request.user == review.user %}
+                <form action="{% url 'delete_review' product.id %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="review_id" value="{{ review.id }}">
+                    <input type="submit" value="DELETE" onclick="return confirm('Delete this review?')" />
+                </form>
+            {% endif %}
         </div>
     {% endfor %}
 </div>
