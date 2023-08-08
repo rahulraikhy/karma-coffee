@@ -106,7 +106,11 @@
         data-roast="{{ product.roast }}"
       >
         <a href="{% url 'detail' product.id %}" class="card h-100">
-          <img src="IMAGE" class="card-img-top" alt="Product image" />
+          <img
+            src="{{ product.image.url }}"
+            class="card-img-top"
+            alt="Product image"
+          />
           <div class="card-body">
             <h5 class="card-title">{{ product.name }}</h5>
             <p class="card-text">${{ product.price }}</p>
