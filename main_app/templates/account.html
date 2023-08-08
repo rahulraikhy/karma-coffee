@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Your Account</h2>
+<h3>Your Orders</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Order #</th>
+            <th>Items</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.id }}</td>
+            <td>
+                <ul>
+                    {% for item in order.orderitem_set.all %}
+                    <li>{{ item.product.name }} ({{ item.quantity }})</li>
+                    {% endfor %}
+                </ul>
+            </td>
+            <td>{{ order.date }}</td>
+            <td>{{ order.get_status_display }}</td>
+            <td>${{ order.get_total }}</td>
+            <td><a href="{{ order.get_absolute_url }}">View Details</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

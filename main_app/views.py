@@ -44,7 +44,8 @@ def products_detail(request, product_id):
     # reviews_for_product = Review.objects.filter(id__in=id_list)
     if request.user.is_authenticated:
         user = request.user
-        delivered_orders = Order.objects.filter(user=user, status='D', orderitem__product=product)
+        delivered_orders = Order.objects.filter(
+            user=user, status='D', orderitem__product=product)
 
         if delivered_orders.exists():
             review_form = ReviewForm()
@@ -54,7 +55,7 @@ def products_detail(request, product_id):
     reviews_for_product = product.reviews.all()
 
     return render(request, 'products/detail.html', {
-        'product': product, 
+        'product': product,
         'review_form': review_form,
         'reviews': reviews_for_product
     })
@@ -74,7 +75,6 @@ def add_review(request, product_id):
         new_review.save()
 
     return redirect('detail', product_id)
-        
 
 
 def signup(request):
@@ -261,3 +261,9 @@ def checkout_success(request):
 
 def checkout_cancel(request):
     return render(request, 'cancel.html')
+
+
+@login_required
+def account_view(request):
+    user_orders = Order.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'account.html', {'orders': user_orders})
