@@ -28,7 +28,7 @@ RATING = (
 class Product(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=250)
-    price = models.IntegerField()
+    price = models.DecimalField(max_digits=5, decimal_places=2)
     origin = models.CharField(max_length=100)
     flavour = models.CharField(max_length=100)
     roast = models.CharField(
