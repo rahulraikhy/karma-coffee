@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-0wqq2n0b4a81x4zn23i_*o+(93!1uf3laaae=siv6gx1!3%#r^
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '6fff-2800-484-5b81-1df9-79a3-2a17-9a4e-a490.ngrok-free.app',
+    '127.0.0.1', 
     'localhost',
 ]
 
@@ -54,7 +54,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'allauth.socialaccount.providers.google'
+    'allauth.socialaccount.providers.google',
 ]
 
 SOCIALACCOUNT_PROVIDERS = {

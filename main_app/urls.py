@@ -5,6 +5,7 @@ from .views import remove_from_cart
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('logout', views.logout_view),
     path('learn/', views.learn, name='learn'),
     path('products/', views.products_index, name='index'),
     path('products/<int:product_id>/', views.products_detail, name='detail'),

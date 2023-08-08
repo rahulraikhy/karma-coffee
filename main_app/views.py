@@ -6,7 +6,7 @@ from django.conf import settings
 from django.http import JsonResponse
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -286,3 +286,7 @@ def checkout_success(request):
 
 def checkout_cancel(request):
     return render(request, 'cancel.html')
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
