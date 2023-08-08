@@ -14,6 +14,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product, Order, OrderItem, Review, User
 
 from .forms import ReviewForm
+from .models import Product, Order, OrderItem, Review, User
+
+from .forms import ReviewForm
 
 stripe.api_key = settings.STRIPE_API_KEY_HIDDEN
 
@@ -52,6 +55,9 @@ def products_detail(request, product_id):
     reviews_for_product = product.reviews.all()
 
     return render(request, 'products/detail.html', {
+        'product': product, 
+        'review_form': review_form,
+        'reviews': reviews_for_product
         'product': product, 
         'review_form': review_form,
         'reviews': reviews_for_product
