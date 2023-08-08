@@ -40,16 +40,14 @@ def products_index(request):
 def products_detail(request, product_id):
     product = Product.objects.get(id=product_id)
 
-    # id_list = product.review.all().values_list('id')
-    # reviews_for_product = Review.objects.filter(id__in=id_list)
+    review_form = None
+
     if request.user.is_authenticated:
         user = request.user
         delivered_orders = Order.objects.filter(user=user, status='D', orderitem__product=product)
 
         if delivered_orders.exists():
             review_form = ReviewForm()
-        else:
-            review_form = None
 
     reviews_for_product = product.reviews.all()
 
@@ -74,7 +72,34 @@ def add_review(request, product_id):
         new_review.save()
 
     return redirect('detail', product_id)
-        
+
+
+# def edit_review(request, review_id, product_id):
+#     review = Review.objects.get(id=review_id)
+#     # form = ReviewForm(request.POST)
+
+#     if request.method == 'POST':
+#         new_content = request.POST.get('content')
+#         review.content = new_content
+#         review.save()
+#         return redirect('detail', product_id=review.product.id)
+    
+#     return render(request, 'product_detail.html', {'product': review.product, 'edit_review_id': review.id})
+
+
+def delete_review(request, product_id):
+    if request.method == 'POST':
+        review_id = request.POST.get('review_id')
+        print("Review ID:", review_id)
+        print("Product ID:", product_id)
+        try:
+            review = Review.objects.get(id=review_id, product_id=product_id)
+            print("Review found:", review)
+            review.delete()
+        except Review.DoesNotExist:
+            print("Review not found")
+        return redirect('detail', product_id=product_id)
+
 
 
 def signup(request):

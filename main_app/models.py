@@ -1,6 +1,6 @@
 from django.db import models
 from django.urls import reverse
-from datetime import date
+from datetime import date, timedelta
 from django.contrib.auth.models import User
 
 ROAST = (
@@ -71,8 +71,8 @@ class OrderItem(models.Model):
 
 
 class Review(models.Model):
-    purchase_date = models.DateField('Purchased Date', default="2023-08-15")
-    review_date = models.DateField('Review Date', default="2023-08-17")
+    purchase_date = models.DateField('Purchased Date', default=date.today() - timedelta(days=7))
+    review_date = models.DateField('Review Date', default=date.today)
     content = models.TextField(max_length=250)
     rating = models.CharField(max_length=1, default='5')
 
@@ -81,6 +81,9 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Purchased Date: {self.purchase_date} / Review Date: {self.review_date} / Product: { self.product.name } / "
+    
+    def get_absolute_url(self):
+        return reverse('detail', kwargs={'product_id': self.product.id})
 
     class Meta:
         ordering = ['-purchase_date']
