@@ -270,16 +270,17 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
 
 
 def checkout_success(request):
-    # Extract session_id from the URL
     session_id = request.GET.get('session_id')
+    print("Extracted session_id:", session_id)
 
-    # Retrieve the session
     session = stripe.checkout.Session.retrieve(session_id)
 
-    # Retrieve the order associated with this session
-    order = Order.objects.get(session_id=session_id)
+    try:
+        order = Order.objects.get(session_id=session_id)
+    except Order.DoesNotExist:
+        print(f"No Order found for session_id: {session_id}")
+        order = None
 
-    # Update order status if the payment was successful
     if session.payment_status == 'paid':
         order.status = 'P'
         order.save()
