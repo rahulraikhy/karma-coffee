@@ -13,12 +13,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product, Order, OrderItem, Review, User
 
-<<<<<<< HEAD
-from .forms import ReviewForm, UserForm
-=======
+from .forms import UserForm
 from .forms import ReviewForm
 from .forms import RegisterUserForm
->>>>>>> main
+
 
 stripe.api_key = settings.STRIPE_API_KEY_HIDDEN
 
@@ -78,8 +76,6 @@ def add_review(request, product_id):
         new_review.save()
 
     return redirect('detail', product_id)
-<<<<<<< HEAD
-=======
 
 
 # def edit_review(request, review_id, product_id):
@@ -91,7 +87,7 @@ def add_review(request, product_id):
 #         review.content = new_content
 #         review.save()
 #         return redirect('detail', product_id=review.product.id)
-    
+
 #     return render(request, 'product_detail.html', {'product': review.product, 'edit_review_id': review.id})
 
 
@@ -107,8 +103,6 @@ def delete_review(request, product_id):
         except Review.DoesNotExist:
             print("Review not found")
         return redirect('detail', product_id=product_id)
-
->>>>>>> main
 
 
 def signup(request):
@@ -296,7 +290,6 @@ def checkout_success(request):
 def checkout_cancel(request):
     return render(request, 'cancel.html')
 
-<<<<<<< HEAD
 
 @login_required
 def account_view(request):
@@ -316,8 +309,8 @@ def account_view(request):
 def order_detail_view(request, order_id):
     order = get_object_or_404(Order, id=order_id)
     return render(request, 'order_detail.html', {'order': order})
-=======
+
+
 def logout_view(request):
     logout(request)
     return redirect('/')
->>>>>>> main
