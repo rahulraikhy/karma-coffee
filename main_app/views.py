@@ -254,13 +254,12 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
             success_url=YOUR_DOMAIN +
             '/success/?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=YOUR_DOMAIN + '/cancel/',
+            shipping_address_collection={'allowed_countries': ['GB', 'IE'], },
         )
 
-        # Replace placeholder with actual id
         checkout_session.success_url = checkout_session.success_url.replace(
             '{CHECKOUT_SESSION_ID}', checkout_session.id)
 
-        # Store the session id in the order
         cart.session_id = checkout_session.id
         cart.save()
 
