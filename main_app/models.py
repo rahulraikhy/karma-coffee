@@ -16,6 +16,14 @@ ORDER_STATUS = (
     ('D', 'Delivered'),      # Order delivered
 )
 
+RATING = (
+    (5, '5'),
+    (4, '4'),
+    (3, '3'),
+    (2, '2'),
+    (1, '1')
+)
+
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -28,6 +36,7 @@ class Product(models.Model):
         choices=ROAST,
         default=ROAST[0][0]
     )
+    image = models.ImageField(upload_to='product_images', blank=True)
     quantity = models.IntegerField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
@@ -74,7 +83,10 @@ class Review(models.Model):
     purchase_date = models.DateField('Purchased Date', default=date.today() - timedelta(days=7))
     review_date = models.DateField('Review Date', default=date.today)
     content = models.TextField(max_length=250)
-    rating = models.CharField(max_length=1, default='5')
+    rating = models.IntegerField(
+        choices=RATING,
+        default=RATING[0]
+    )
 
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(User, on_delete=models.CASCADE)

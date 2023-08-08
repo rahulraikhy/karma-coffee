@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 from . import views
 from .views import remove_from_cart
 
@@ -25,4 +27,4 @@ urlpatterns = [
          name='create-checkout-session'),
     path('success/', views.checkout_success, name='checkout_success'),
     path('cancel/', views.checkout_cancel, name='checkout_cancel'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
