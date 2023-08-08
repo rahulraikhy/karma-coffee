@@ -31,19 +31,29 @@ SECRET_KEY = 'django-insecure-0wqq2n0b4a81x4zn23i_*o+(93!1uf3laaae=siv6gx1!3%#r^
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '127.0.0.1', 
+    '127.0.0.1',
     'localhost',
 ]
 
 STRIPE_API_KEY_PUBLISHABLE = 'pk_test_51NcAplKTTNpybu1oBa9m6XeqC3TGQOCw0EYJQhJJHLCf3eC996sIC8pdtr7NSw3GBDYpPZdEEJIA4TW7FYZDvCD200HwjTkail'
 STRIPE_API_KEY_HIDDEN = os.environ['STRIPE_API_KEY_HIDDEN']
 
-SITE_ID=1
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+SITE_ID = 1
 
 # Application definition
 
 INSTALLED_APPS = [
     'main_app',
+    'crispy_forms',
+    "crispy_bootstrap5",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

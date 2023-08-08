@@ -13,8 +13,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product, Order, OrderItem, Review, User
 
+from .forms import UserForm
 from .forms import ReviewForm
 from .forms import RegisterUserForm
+
 
 stripe.api_key = settings.STRIPE_API_KEY_HIDDEN
 
@@ -45,7 +47,8 @@ def products_detail(request, product_id):
 
     if request.user.is_authenticated:
         user = request.user
-        delivered_orders = Order.objects.filter(user=user, status='D', orderitem__product=product)
+        delivered_orders = Order.objects.filter(
+            user=user, status='D', orderitem__product=product)
 
         if delivered_orders.exists():
             review_form = ReviewForm()
@@ -53,7 +56,7 @@ def products_detail(request, product_id):
     reviews_for_product = product.reviews.all()
 
     return render(request, 'products/detail.html', {
-        'product': product, 
+        'product': product,
         'review_form': review_form,
         'reviews': reviews_for_product
     })
@@ -84,7 +87,7 @@ def add_review(request, product_id):
 #         review.content = new_content
 #         review.save()
 #         return redirect('detail', product_id=review.product.id)
-    
+
 #     return render(request, 'product_detail.html', {'product': review.product, 'edit_review_id': review.id})
 
 
@@ -100,7 +103,6 @@ def delete_review(request, product_id):
         except Review.DoesNotExist:
             print("Review not found")
         return redirect('detail', product_id=product_id)
-
 
 
 def signup(request):
@@ -268,16 +270,17 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
 
 
 def checkout_success(request):
-    # Extract session_id from the URL
     session_id = request.GET.get('session_id')
+    print("Extracted session_id:", session_id)
 
-    # Retrieve the session
     session = stripe.checkout.Session.retrieve(session_id)
 
-    # Retrieve the order associated with this session
-    order = Order.objects.get(session_id=session_id)
+    try:
+        order = Order.objects.get(session_id=session_id)
+    except Order.DoesNotExist:
+        print(f"No Order found for session_id: {session_id}")
+        order = None
 
-    # Update order status if the payment was successful
     if session.payment_status == 'paid':
         order.status = 'P'
         order.save()
@@ -287,6 +290,27 @@ def checkout_success(request):
 
 def checkout_cancel(request):
     return render(request, 'cancel.html')
+
+
+@login_required
+def account_view(request):
+    user_orders = Order.objects.filter(user=request.user)
+    if request.method == 'POST':
+        # Handle user profile update here
+        user_form = UserForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            messages.success(request, 'Your profile was successfully updated!')
+            return redirect('account')
+    else:
+        user_form = UserForm(instance=request.user)
+    return render(request, 'account.html', {'orders': user_orders, 'user_form': user_form})
+
+
+def order_detail_view(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'order_detail.html', {'order': order})
+
 
 def logout_view(request):
     logout(request)
