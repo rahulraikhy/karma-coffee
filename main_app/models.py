@@ -50,8 +50,8 @@ class Order(models.Model):
     def __str__(self):
         return f'Order #{self.id} - {self.get_status_display()}'
 
-    def get_absolute_url(self):
-        return reverse('order_detail', kwargs={'order_id': self.id})
+    # def get_absolute_url(self):
+    #     return reverse('order_detail', kwargs={'order_id': self.id})
 
     def get_total(self):
         return sum(item.product.price * item.quantity for item in self.orderitem_set.all())
@@ -69,14 +69,14 @@ class OrderItem(models.Model):
         return self.product.price * self.quantity
 
 
-
 class Review(models.Model):
     purchase_date = models.DateField('Purchased Date', default="2023-08-15")
     review_date = models.DateField('Review Date', default="2023-08-17")
     content = models.TextField(max_length=250)
     rating = models.CharField(max_length=1, default='5')
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

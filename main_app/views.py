@@ -13,7 +13,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Product, Order, OrderItem, Review, User
 
-from .forms import ReviewForm
+from .forms import ReviewForm, UserForm
 
 stripe.api_key = settings.STRIPE_API_KEY_HIDDEN
 
@@ -265,5 +265,19 @@ def checkout_cancel(request):
 
 @login_required
 def account_view(request):
-    user_orders = Order.objects.filter(user=request.user).order_by('-date')
-    return render(request, 'account.html', {'orders': user_orders})
+    user_orders = Order.objects.filter(user=request.user)
+    if request.method == 'POST':
+        # Handle user profile update here
+        user_form = UserForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            messages.success(request, 'Your profile was successfully updated!')
+            return redirect('account')
+    else:
+        user_form = UserForm(instance=request.user)
+    return render(request, 'account.html', {'orders': user_orders, 'user_form': user_form})
+
+
+def order_detail_view(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    return render(request, 'order_detail.html', {'order': order})

@@ -1,38 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Your Account</h2>
-<h3>Your Orders</h3>
+<div class="container col-12" style="margin-top: 10vmin;">
+  <div class="row">
+    <div class="col-md-6">
+      <h3>Your Orders</h3>
 
-<table>
-    <thead>
-        <tr>
-            <th>Order #</th>
-            <th>Items</th>
-            <th>Order Date</th>
-            <th>Status</th>
-            <th>Total</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for order in orders %}
-        <tr>
-            <td>{{ order.id }}</td>
-            <td>
-                <ul>
-                    {% for item in order.orderitem_set.all %}
-                    <li>{{ item.product.name }} ({{ item.quantity }})</li>
-                    {% endfor %}
-                </ul>
-            </td>
-            <td>{{ order.date }}</td>
-            <td>{{ order.get_status_display }}</td>
-            <td>${{ order.get_total }}</td>
-            <td><a href="{{ order.get_absolute_url }}">View Details</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+      {% for order in orders %}
+          <div class="order">
+              <h3>Order #{{ order.id }}</h3>
+              <p>Date: {{ order.date }}</p>
+              <p>Status: {{ order.get_status_display }}</p>
+              <p>Total: ${{ order.get_total }}</p>
+
+              <h4>Order Items:</h4>
+              <ul>
+                  {% for item in order.orderitem_set.all %}
+                      <li>
+                          {{ item.product.name }} ({{ item.quantity }}) - ${{ item.product.price }}
+                      </li>
+                  {% endfor %}
+              </ul>
+          </div>
+      {% endfor %}
+    </div>
+    <div class="col-md-6">
+      <h3>Your Details</h3>
+      {% load crispy_forms_tags %}
+      <form method="post">
+          {% csrf_token %}
+          {{ user_form|crispy }}
+          <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
 
 {% endblock %}

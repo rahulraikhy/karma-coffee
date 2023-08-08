@@ -35,11 +35,17 @@ ALLOWED_HOSTS = []
 STRIPE_API_KEY_PUBLISHABLE = 'pk_test_51NcAplKTTNpybu1oBa9m6XeqC3TGQOCw0EYJQhJJHLCf3eC996sIC8pdtr7NSw3GBDYpPZdEEJIA4TW7FYZDvCD200HwjTkail'
 STRIPE_API_KEY_HIDDEN = os.environ['STRIPE_API_KEY_HIDDEN']
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+
 
 # Application definition
 
 INSTALLED_APPS = [
     'main_app',
+    'crispy_forms',
+    "crispy_bootstrap5",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
