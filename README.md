@@ -13,6 +13,20 @@ Django and Python. For this project, we were split into 3 groups, both other gro
 
 <strong><p><a href="https://karma-coffee-abe41bfb39f9.herokuapp.com/">Click to view the Karma Coffee website☕</a></p></strong>
 
+  ***Stripe Test Details:***
+
+- Test card details in order to test stripe checkout
+  - Test Card: Success
+    4242 4242 4242 4242
+  - Test Card: Failed
+    4000 0000 0000 0002
+  - Test Card: 3DS Auth Needed
+    4000 0027 6000 3184
+- Enter any expiry date, for example:
+  12/34
+- Enter any 3 digit security code, for example:
+  234
+
 ## About the Website
 
 Welcome to Karma Coffee, where your coffee cravings meet the convenience of online shopping.
@@ -276,20 +290,6 @@ Mobile responsive design was especially difficult, going forward, we would imple
 
 - Via Stripe, you can check your final order details and have your shipping/payment details set up.
 
-  ***Stripe Test Details:***
-
-- Test card details in order to test stripe checkout
-  - Test Card: Success
-    4242 4242 4242 4242
-  - Test Card: Failed
-    4000 0000 0000 0002
-  - Test Card: 3DS Auth Needed
-    4000 0027 6000 3184
-- Enter any expiry date, for example:
-  12/34
-- Enter any 3 digit security code, for example:
-  234
-
 **LogIn/Sign Up Page**
 
 - You can create an account for our website.
@@ -336,5 +336,6 @@ These resources helped us greatly in the completion of our project.
 - [Trello](https://trello.com/)
 - [Photopea](https://www.photopea.com/)
 - [Google 0Auth](https://cloud.google.com/endpoints/docs/openapi/authenticating-users-auth0)
+- [EZ gif](https://ezgif.com/)
 
 ![karma-coffee](https://github.com/SimpsonRoss/karma-coffee/assets/93015253/aa5eea7d-9988-4ad3-b80d-760e32fb1f2e)
