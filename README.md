@@ -13,20 +13,6 @@ Django and Python. For this project, we were split into 3 groups, both other gro
 
 <strong><p><a href="https://karma-coffee-abe41bfb39f9.herokuapp.com/">Click to view the Karma Coffee website☕</a></p></strong>
 
-  ***Stripe Test Details:***
-
-- Test card details in order to test stripe checkout
-  - Test Card: Success
-    4242 4242 4242 4242
-  - Test Card: Failed
-    4000 0000 0000 0002
-  - Test Card: 3DS Auth Needed
-    4000 0027 6000 3184
-- Enter any expiry date, for example:
-  12/34
-- Enter any 3 digit security code, for example:
-  234
-
 ## About the Website
 
 Welcome to Karma Coffee, where your coffee cravings meet the convenience of online shopping.
@@ -50,6 +36,62 @@ For this project we built a fullstack application using these tools:
 ![Django](https://img.shields.io/badge/django-%23092E20.svg?style=for-the-badge&logo=django&logoColor=white)
 ![Postgres](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Heroku](https://img.shields.io/badge/Heroku-430098?style=for-the-badge&logo=heroku&logoColor=white)
+
+## The User Journey:
+
+**Home Page**
+
+- To start your coffee journey, click on the 'Coffee' option in the navigation bar.
+- For a more personalized experience, sign up using your Google account to unlock special offers and features.
+
+**Coffee Product Page**
+
+- View All Coffee proudcts.
+- Click 'Origin' to filter down the products by origins(Colombia, Ethiopia, Brazil, India).
+- Click 'Origin' to filter down the products by roast level(Dark, Medium, Light).
+- Click specific item to see more details.
+
+**Product Detail Page**
+
+- See the product image.
+- Read the story behind the coffee blend and its origin and flavors.
+- Add quantity and click 'Add to Cart' button to buy the coffee.
+- Scroll down to explore customer reviews and ratings.
+
+**Cart Page**
+
+- See which products you put in your cart.
+- Check quantity and price of the products you have in cart.
+- Update the quantity and delete products if you need.
+- You can check the total price and click 'Go to Checkout' button to purchase.
+
+**Payment Page**
+
+- Via Stripe, you can check your final order details and have your shipping/payment details set up.
+
+**Stripe Test Details:**
+
+- Test card details in order to test stripe checkout
+  - Test Card: Success
+    4242 4242 4242 4242
+  - Test Card: Failed
+    4000 0000 0000 0002
+  - Test Card: 3DS Auth Needed
+    4000 0027 6000 3184
+- Enter any expiry date, for example:
+  12/34
+- Enter any 3 digit security code, for example:
+  234
+
+**LogIn/Sign Up Page**
+
+- You can create an account for our website.
+- You can also sign up through OAuth with a popular platform, Google.
+
+**Account Page**
+
+- Check your order history.
+- Update your account details.
 
 <!-- ROADMAP -->
 
@@ -257,48 +299,6 @@ Mobile responsive design was especially difficult, going forward, we would imple
 - **Mobile responsiveness first**It became very difficult to go back and tailer our content to mobile views, as such, implementing this first next project would be beneficial.
 
 - **Trust each other**For our first group project, we were all hesitant at the start to delegate too much or too little work to each other, but as the project went on, we understood each other's skills, that everyone could and would contribute to the project.
-
-## The User Journey:
-
-**Home Page**
-
-- To start your coffee journey, click on the 'Coffee' option in the navigation bar.
-- For a more personalized experience, sign up using your Google account to unlock special offers and features.
-
-**Coffee Product Page**
-
-- View All Coffee proudcts.
-- Click 'Origin' to filter down the products by origins(Colombia, Ethiopia, Brazil, India).
-- Click 'Origin' to filter down the products by roast level(Dark, Medium, Light).
-- Click specific item to see more details.
-
-**Product Detail Page**
-
-- See the product image.
-- Read the story behind the coffee blend and its origin and flavors.
-- Add quantity and click 'Add to Cart' button to buy the coffee.
-- Scroll down to explore customer reviews and ratings.
-
-**Cart Page**
-
-- See which products you put in your cart.
-- Check quantity and price of the products you have in cart.
-- Update the quantity and delete products if you need.
-- You can check the total price and click 'Go to Checkout' button to purchase.
-
-**Payment Page**
-
-- Via Stripe, you can check your final order details and have your shipping/payment details set up.
-
-**LogIn/Sign Up Page**
-
-- You can create an account for our website.
-- You can also sign up through OAuth with a popular platform, Google.
-
-**Account Page**
-
-- Check your order history.
-- Update your account details.
 
 <!-- CONTRIBUTING -->
 
