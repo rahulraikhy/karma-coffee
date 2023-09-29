@@ -88,7 +88,7 @@ Due to this being a collaborative project, we followed Agile methodologies with 
 
 Our group method to tackle this project was to divide key responsibilities between the three of us, and then assign pages for each of us to build, style, and implement our responsibilities across the pages. 
 
-My key responsibility was to implement the user authorisation, a secondary authorisation (we had chosen google), create a sign up form and sign up page, a log in page, and ensure the styling of these pages kept the theme of the overall website.
+My key responsibility was to implement the user authorisation, a secondary authorisation (we had chosen google), create a sign up form and sign up page, a log in page, confirm a User could not leave, edit or delete reviews on coffee products without being logged in, and ensure the styling of these pages kept the theme of the overall website.
 
 **Creating An Account**
 
